@@ -1,6 +1,6 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_MEETING_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_MISSING_ARGUMENTS;
 import static seedu.address.commons.core.Messages.MESSAGE_MISSING_INDEX;
 
@@ -27,8 +27,8 @@ public class RemoveMeetingCommandParser implements Parser<RemoveMeetingCommand> 
 
         String[] indexes = args.trim().split(" ");
         if (indexes.length > 2) {
-            String message_Invalid_Argument_Count = "meetingRemove only accepts 2 arguments!";
-            throw new ParseException(message_Invalid_Argument_Count);
+            String messageInvalidArgumentCount = "meetingRemove only accepts 2 arguments!";
+            throw new ParseException(messageInvalidArgumentCount);
         }
 
         try {
@@ -36,9 +36,10 @@ public class RemoveMeetingCommandParser implements Parser<RemoveMeetingCommand> 
             Index indexMeeting = ParserUtil.parseIndex(indexes[1]);
             return new RemoveMeetingCommand(indexPerson, indexMeeting);
         } catch (ParseException parseErr) {
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveMeetingCommand.MESSAGE_USAGE, parseErr)
-            );
+            String parseErrMessage =
+                MESSAGE_INVALID_MEETING_DISPLAYED_INDEX + "\n"
+                + RemoveMeetingCommand.MESSAGE_USAGE;
+            throw new ParseException(parseErrMessage);
         } catch (ArrayIndexOutOfBoundsException arrayErr) {
             throw new ParseException(
                 String.format(MESSAGE_MISSING_INDEX, RemoveMeetingCommand.MESSAGE_USAGE)

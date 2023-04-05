@@ -1,14 +1,13 @@
 package seedu.address.logic.parser;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_MEETING_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_MISSING_ARGUMENTS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_DESC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_END;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_START;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.RemoveMeetingCommand;
 import seedu.address.logic.commands.UpdateMeetingCommand;
 import seedu.address.logic.commands.UpdateMeetingCommand.EditMeetingDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -38,15 +37,17 @@ public class UpdateMeetingCommandParser implements Parser<UpdateMeetingCommand> 
 
         String[] allIndexes = argMultimap.getPreamble().split(" ");
 
-        if (allIndexes.length > 2) {
+        if (allIndexes.length != 2) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateMeetingCommand.MESSAGE_USAGE));
         }
         try {
             index = ParserUtil.parseIndex(allIndexes[0]);
             meetingIndex = ParserUtil.parseIndex(allIndexes[1]);
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateMeetingCommand.MESSAGE_USAGE),
-                pe);
+            String parseErrMessage =
+                MESSAGE_INVALID_MEETING_DISPLAYED_INDEX + "\n"
+                    + UpdateMeetingCommand.MESSAGE_USAGE;
+            throw new ParseException(parseErrMessage);
         }
         EditMeetingDescriptor editMeetingDescriptor = new EditMeetingDescriptor();
         if (argMultimap.getValue(PREFIX_MEETING_DESC).isPresent()) {

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_MEETING_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_MISSING_ARGUMENTS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_DESC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_END;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.AddMeetingCommand;
+import seedu.address.logic.commands.RemoveMeetingCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Meeting;
 
@@ -44,8 +46,10 @@ public class AddMeetingCommandParser implements Parser<AddMeetingCommand> {
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (IllegalValueException ive) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                AddMeetingCommand.MESSAGE_USAGE), ive);
+            String invalidIndexMsg =
+                MESSAGE_INVALID_MEETING_DISPLAYED_INDEX + "\n"
+                    + RemoveMeetingCommand.MESSAGE_USAGE;
+            throw new ParseException(invalidIndexMsg);
         }
 
         String description = argMultimap.getValue(PREFIX_MEETING_DESC).get();

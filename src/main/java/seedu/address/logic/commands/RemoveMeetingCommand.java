@@ -1,8 +1,10 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_MEETING_DISPLAYED_INDEX;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+
 import java.util.List;
 
-import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -22,8 +24,8 @@ public class RemoveMeetingCommand extends Command {
         + "Example: " + COMMAND_WORD + " 1 2";
     public static final String MESSAGE_REMOVE_SUCCESS = "Removed meeting from person: %1$s";
 
-    private Index indexPerson;
-    private Index indexMeeting;
+    private final Index indexPerson;
+    private final Index indexMeeting;
 
     /**
      * Removes meeting at specified index from specified {@code Person}
@@ -48,13 +50,19 @@ public class RemoveMeetingCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (indexPerson.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            String invalidIndexMessage =
+                MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + "\n"
+                + "Index should be less than " + lastShownList.size();
+            throw new CommandException(invalidIndexMessage);
         }
 
         Person personToEdit = lastShownList.get(indexPerson.getZeroBased());
 
         if (indexMeeting.getZeroBased() > personToEdit.getMeetings().size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_MEETING_DISPLAYED_INDEX);
+            String invalidIndexMessage =
+                MESSAGE_INVALID_MEETING_DISPLAYED_INDEX + "\n"
+                    + "Index should be less than " + personToEdit.getMeetings().size();
+            throw new CommandException(invalidIndexMessage);
         }
 
         //Removes meeting and returns edited Person
